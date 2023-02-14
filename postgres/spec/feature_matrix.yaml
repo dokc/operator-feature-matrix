@@ -1,7 +1,7 @@
 ---
 metadata:
-  version: 1.0-beta1-SNAPSHOT
-  date: 2023-01-31
+  version: 1.0-BETA1
+  date: # when released
 categories:
   - id: genc
     name: General Characteristics
@@ -12,53 +12,75 @@ categories:
         description: |
           Mechanism(s) provided to install the operator.
         vendor_compliance: |
-          Provide a succint value or list of values of the mechanisms supported.
-          E.g. 'YAMLs', 'Helm', 'Kustomize', 'Operator Bundle', etc.
+          Provide a succinct value or list of values of the mechanisms supported.
+          If any of the following names apply, use them, and add other mechanism names, as needed:
+          
+          * YAML
+          * Helm
+          * Kustomize
+          * Operator Bundle
         main: true
       - id: mcrds
-        name: Management via CRDs 
+        name: Management via CRDs
         type: boolean
         description: |
-          The operator can be managed via CRDs (Custom Resource Definition). 
+          The operator can be managed via CRDs (Custom Resource Definition).
         vendor_compliance: |
           If true, provide a list of the names of the CRDs supported by the operator. Names should be direct links to their documentation.
         main: true
-      - id: airgi
-        name: Air-gapped installation
+      - id: offin
+        name: Offline installation
         type: boolean
         description: |
-          Whether it is possible to insall the operator on a cluster without Internet connection. 
+          Whether it is possible to install the operator on a (air-gapped) cluster without internet connection.
         vendor_compliance: |
           A link should be provided with documentation on how to install the operator on air-gapped environments.
-      - id: amd64
-        name: x86-64 support
-        type: boolean
-        description: |
-          Operator supports running on x86-64 CPU nodes
-        main: true
-      - id: arm64
-        name: ARM64 support
-        type: boolean
-        description: |
-          Operator supports running on ARM64 CPU nodes
-        main: true
-      - id: ocpus
-        name: Other CPUs support
+      - id: scpua
+        name: Supported CPU architectures
         type: string_array
         description: |
-          Operator supports running on nodes with CPU architectures other than x86-64 and ARM64, (e.g: ppc64le, s390x)
+          Support for the operator to run on nodes with specified CPU architectures.
         vendor_compliance: |
-          Provide a list of short strings of the other CPU architectures that are supported.
+          Provide a list of CPU architectures that are supported between:
+          
+          * amd64
+          * arm
+          * arm64
+          * ppc64le
+          * s390x
+
+          In case you support additional architectures, add their name(s) in a similar fashion.
       - id: coios
         name: Container images OSes
         type: string_array
         description: |
-          Indicate the OS or base image of the images used by the operator. (e.g: scratch, ubi, fedora, ubuntu, centos, alpine, etc.)
+          Indicate the base image of the images used by the operator. (e.g: scratch, ubi, fedora, ubuntu, centos, alpine, etc.).
+          Provide the image name without tags (e.g. debian instead of debian:8.11)
+      - id: olmcl
+        name: Operator Capability Level
+        type: string
+        descriptions: |
+          [Operator Capability Levels](https://sdk.operatorframework.io/docs/overview/operator-capabilities/) indicates the operator maturity
+          levels in regards to their lifecycle management capabilities for the application or workload they deliver. The capability models
+          aims to provide guidance in terminology to express what features users can expect from an operator.
+        vendor_compliance: |
+          Capability level must be set one of the following levels:
+
+          1. `Basic Install`
+          2. `Seamless Upgrades`
+          3. `Full Lifecycle`
+          4. `Deep Insights`
+          5. `Auto Pilot`
+
+          A link should be provided with documentation on how the operator fulfil the declared capability level.
+
+          For a detailed description of each capability level refer to the Operator Framework documentation for
+          [Operator Capability Level](https://sdk.operatorframework.io/docs/overview/operator-capabilities/).
   - id: vers
     name: Versions
     features:
       - id: pgver
-        name: Supported PostgreSQL versions 
+        name: Supported PostgreSQL versions
         type: string_array
         description: |
           Which major (and minor) versions does this version of the operator support.
@@ -68,16 +90,16 @@ categories:
           Other components versions that are used may be described in the comments (e.g: Patroni, WAL-G, PgBackRest, PgBouncer, etc.)
         main: true
       - id: k8ver
-        name: Supported Kubernetes versions 
+        name: Supported Kubernetes versions
         type: string_array
         description: |
           Which Kubernetes versions the operator can be installed into.
         vendor_compliance: |
-          Provide a list of official Kubernetes versions numbers, ordered by reverse chronological order.
-          E.g. '1.26.x - 1.23.x' or '1.22.x - 1.19.x'.
+          Provide a list of official Kubernetes minor versions numbers, ordered by reverse chronological order.
+          Use a range of versions, if possible, e.g. '1.26 - 1.23' or '1.22 - 1.19'.
         main: true
       - id: pgfor
-        name: PostgreSQL OSS forks 
+        name: PostgreSQL OSS forks
         type: string_array
         description: |
           PostgreSQL forks are considered derived projects that started from PostgreSQL codebase and add different features while maintaining compatibility with PostgreSQL.
@@ -85,8 +107,6 @@ categories:
         vendor_compliance: |
           Leave empty if no version other than the original PostgreSQL is supported. Otherwise, provide a list of names and links to the PostgreSQL forks supported.
           If non-OSS forks are supported, leave empty but add a link to them in the comments section.
-          E.g. '1.26.x - 1.23.x', '1.22.x - 1.19.x'.
-        main: false
   - id: lisu
     name: Licensing & Support
     features:
@@ -96,7 +116,7 @@ categories:
         description: |
           The operator is published, and its source code is made publicly available, under an OSI-approved open source license.
         vendor_compliance: |
-          If true, provide the SPDX identifier of the license.
+          If true, provide the SPDX identifier(s) of the license.
         main: true
       - id: fcimg
         name: Free container images
@@ -122,14 +142,14 @@ categories:
           Vendor and/or other entities offer paid-for, commercial support for the operator.
         vendor_compliance: |
           Provide a link or list of links to the entities that provide commercial support.
-          Links should be as targetted as possible, pointing to informative documentation on the provided support.
+          Links should be as specific as possible, pointing to informative documentation on the provided support.
       - id: pubit
         name: Public issue tracker
         type: boolean
         description: |
           Development happens in the open. There is a public issue tracker where users may view, comment and create issues.
         vendor_compliance: |
-          Provide a targetted link to the issue tracker.
+          Provide a specific link to the issue tracker.
       - id: pubch
         name: Public chat/forums
         type: boolean
@@ -141,7 +161,7 @@ categories:
     name: PostgreSQL Clusters
     features:
       - id: depau
-        name: Deployment automation 
+        name: Deployment automation
         type: boolean
         description: |
           The operator provides capabilities to deploy production-ready clusters automatically based on a provided configuration.
@@ -152,15 +172,15 @@ categories:
         description: |
           Which Pod management technology is used to handle database's Pods. E.g. 'StatefulSet', 'Deployment', 'Custom', etc.
         vendor_compliance: |
-          Provide the most succint possible name of the technology.
+          Provide the most succinct possible name of the technology. Use the Kubernetes resource type name (e.g. 'Deployment'), if applicable.
         main: true
       - id: pgcnf
         name: PostgreSQL custom config
         type: boolean
         description: |
-          The operator allows the user to supply custom PostgreSQL configurations for the clusters.
+          The operator allows the user to supply custom PostgreSQL configuration.
       - id: conpl
-        name: Integrated connection pooling 
+        name: Integrated connection pooling
         type: boolean
         description: |
           The operator provides options to deploy a connection pool in front of the database, automatically deployed and configured.
@@ -169,71 +189,69 @@ categories:
           All should be valid towards this feature as long as they are deployed automatically and offer an entrypoint for the user to the connection pooler.
         main: true
       - id: cpccf
-        name: Connection pool custom config 
+        name: Connection pool custom config
         type: boolean
         description: |
           The operator allows the user to supply a custom connection pool configuration for the connection pool service.
         vendor_compliance: |
           Only applies if [pgcl/conpl] is true.
       - id: tlssp
-        name: TLS Support 
+        name: TLS Support
         type: boolean
         description: |
           PostgreSQL connections can be secured with Postgres SSL/TLS support.
         main: true
       - id: tlscu
-        name: TLS custom certificates 
+        name: TLS user-provided certificates
         type: boolean
         description: |
           Operators may chose by default to generate self-signed SSL certificates.
           They may also offer the option to specify the CA and certificates that users want Postgres clusters to use.
-        vendor_compliance: |
-          Vendors should add link in the comments section to the relevant documentation if this feature is provided.
       - id: crtmg
-        name: CertManager integration 
+        name: CertManager integration
         type: boolean
         description: |
-           The operator integrates with CertManager in order to generate the certificate to be used with Postgres. 
+          The operator integrates with CertManager in order to generate the certificate to be used with Postgres.
         vendor_compliance: |
-          Only applues if [pgcl/tlscu] is true.
+          Only applies if [pgcl/tlscu] is true.
       - id: insql
-        name: Initialization from SQL scripts 
+        name: Initialization from SQL scripts
         type: boolean
         description: |
           After the database cluster creation, the operator will run automatically one or more user-supplied scripts for initial DDL or data (possibly limited in size) creation.
           The operator must properly inform the user of the execution result of the scripts.
       - id: inext
-        name: Initialization from external source 
+        name: Initialization from external source
         type: boolean
         description: |
           After the database cluster creation, the operator will automatically connect to an external data source (like an object storage or a public repo) and fetch the DDL/data.
           The operator must properly inform the user of the execution result of the scripts.
       - id: cuhba
-        name: HBA custom config 
+        name: HBA custom config
         type: boolean
         description: |
           The operator allows users to provide custom configuration for the Postgres HBA (Host-Based Authentication) mechanism.
           It may involve directly generating the custom `pg_hba.conf` file or by using more cloud-native technologies.
       - id: mgmup
-        name: Management of db users/passwords 
+        name: Management of db users/passwords
         type: boolean
         description: |
           The operator provides a mechanism to declaratively create, modify or delete users, roles and/or password for the PostgreSQL cluster.
       - id: reqli
-        name: Customize requests, limits 
+        name: Customize computing resource requests, limits
         type: boolean
         description: |
-          The user may specify/customize the requests, the limits or both for the Postgres pods.
+          The user may specify/customize the requests, the limits or both for computing resources (CPU, memory) of the Postgres pods.
         main: true
       - id: hugpa
-        name: Support for huge pages 
+        name: Support for huge pages
         type: boolean
         description: |
           The user may specify the request to use huge pages for Postgres (and/or potentially other sidecars).
           Postgres must be able to be configured and start using huge pages.
         main: true
       - id: pgsrv
-        name: PostgreSQL exposed via Service 
+        name: PostgreSQL exposed via Service
         type: string
         description: |
           The operator creates by default or allows the user to request one or more Kubernetes Service(s) to be created to expose the PostgreSQL connections.
@@ -241,12 +259,12 @@ categories:
         vendor_compliance: |
           The value must be one of:
 
-          * PrimaryAndReplicas: Primary and replicas services must be offered
-          * PrimaryAndReplicasAndBalanced: Primary service, replicas services and a service that load balance RW/RO traffic transparently must be offered
+          * PrimaryAndReplicas: Primary and replicas services must be offered.
+          * PrimaryAndReplicasAndBalanced: Primary service, replicas services and a service that load balance RW/RO traffic transparently must be offered.
           * Balanced: A single service that load balances RW/RO traffic transparently.
-          * Primary: Primary service must be offered
+          * Primary: Primary service must be offered.
       - id: stosc
-        name: Automatic storage scaling 
+        name: Automatic storage scaling
         type: boolean
         description: |
           If the user's selected storage technology supports transparent scaling, the operator will take care of scaling the storage automatically
@@ -258,20 +276,20 @@ categories:
           The number of pods in the cluster can be set to 0. This implies that no pods (no compute) would be used, but storage is not removed.
           Upon scaling up, the cluster should be brought back up without the need to restore a backup.
       - id: tblsp
-        name: Tablespaces 
+        name: Tablespaces
         type: boolean
         description: |
           The user may specify one or more PostgreSQL tablespaces and their associated backing storage.
       - id: cupgi
-        name: Custom Postgres images 
+        name: Custom Postgres images
         type: boolean
         description: |
-          The operator allows the user to specify custom (user-provided) container images, instead of using the operator's provided images.
+          The operator allows the user to specify custom (user-provided) Postgres container images, instead of using the operator's provided images.
         vendor_compliance: |
-          The operator should specify if the custom image needs to follow some minimal paterns to be able to work, or if it can work
+          The operator should specify if the custom image needs to follow some minimal patterns to be able to work, or if it can work
           with any postgres container image provided.
       - id: uside
-        name: User supplied sidecars 
+        name: User supplied sidecars
         type: boolean
         description: |
           The user may specify custom sidecars (containers or init containers) to be created alongside the Postgres container (and, possibly, other operator sidecars).
@@ -280,18 +298,16 @@ categories:
         name: User supplied volumes
         type: boolean
         description: |
-          The user may specify custom volumes to be created alongside the volumes created for the Postgres container.
-        vendor_compliance: |
-          Only applies if [pgcl/uside] is true.
+          The user may specify and mount custom volumes to be created alongside the volumes created for the Postgres container.
       - id: usprt
         name: User supplied ports
         type: boolean
         description: |
           The user may specify custom ports to be created alongside the services that expose PostgreSQL.
         vendor_compliance: |
-          Only applies if [pgcl/pgsrv] is true.
+          Only applies if [pgcl/pgsrv] is set.
       - id: srvbi
-        name: Support for Service Binding 
+        name: Support for Service Binding
         type: boolean
         description: |
           [Service Binding](https://servicebinding.io/spec/core/1.0.0/) is a Kubernetes specification to "communicating service secrets to workloads in a consistent way".
@@ -300,11 +316,11 @@ categories:
         vendor_compliance: |
           The operator must implement the [Provisioned Service](https://servicebinding.io/spec/core/1.0.0/#provisioned-service) part of the specification.
       - id: cuann
-        name: Custom Annotations 
+        name: Custom Annotations
         type: boolean
         description: |
           The operator allows the user to provide custom [Annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
-          (aside from any operator generated Annotations) to the objects generated by the operator.         
+          (aside from any operator generated Annotations) to the objects generated by the operator.
         vendor_compliance: |
           The operator must provide configuration for setting Annotations on all objects generated by the operator.
           Partial compliance is achieved if at least Pods can be annotated and this is clearly marked in the comments.
@@ -312,7 +328,7 @@ categories:
         name: Custom Labels
         type: boolean
         description: |
-          The operator allows the user to provide custom [Labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) to the objects generated by the operator.          
+          The operator allows the user to provide custom [Labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) to the objects generated by the operator.
         vendor_compliance: |
           The operator must provide configuration for setting Labels on all objects generated by the operator.
           Partial compliance is achieved if at Labels can be added to at least Pods and this is clearly marked in the comments.
@@ -329,7 +345,7 @@ categories:
 
           A link for each supported rule or rules group to assign a Pod to a Node must be specified.
       - id: topsc
-        name: Topology Spread Constraints 
+        name: Topology Spread Constraints
         type: boolean
         description: |
           The operator allows Postgres pods to specify [Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints),
@@ -342,43 +358,43 @@ categories:
         type: boolean
         description: |
           The operator provides the facility that in the event of a node or pod failure where the Postgres primary is affected,
-          another Postgres pod (if it exists) will be promoted to primary. The operation must happen automatically without user intervention
+          another Postgres pod (if it exists) will be promoted to primary. The operation must happen automatically without user intervention.
         main: true
       - id: techa
-        name: HA Technology 
+        name: HA Technology
         type: string
         description: |
           The technology (software name or technology principles) that support the high availability and automated failover capabilities of the operator.
         vendor_compliance: |
-          Provide a succint software or technology name. E.g.: Patroni, Stolon, Custom.
+          Provide a succinct software or technology name. E.g.: Patroni, Stolon, Custom.
         main: true
       - id: asrep
-        name: Asynchronous replication 
+        name: Asynchronous replication
         type: boolean
         description: |
           The operator allows to configure Postgres clusters using asynchronous streaming replication.
           Asynchronous is the default streaming replication mode in Postgres.
       - id: syrep
-        name: Synchronous replication 
+        name: Synchronous replication
         type: boolean
         description: |
           The operator allows to configure Postgres clusters using synchronous streaming replication.
           The operator must manage the configuration details based on the user's preferences on which nodes behave synchronously.
       - id: serep
-        name: Semi-synchronous replication 
+        name: Semi-synchronous replication
         type: boolean
         description: |
           Semi-synchronous, or also called group or quorum replication, is a hybrid mode where a subset of the nodes is expected to replicate synchronously;
           and once that level is reached, the remainding nodes replicate asynchronously.
           That is, Postgres waits for confirmation of the write only from the synchronous nodes before considering the transaction committed.
       - id: derep
-        name: Delayed replicas 
+        name: Delayed replicas
         type: boolean
         description: |
           The operator allows the user to configure one or more replicas subject to a user-specified (intentional) replication lag.
-          This is useful to have always an online instance with data "in the past" for analytics or data recovery purposes.      
+          This is useful to have always an online instance with data "in the past" for analytics or data recovery purposes.
       - id: carep
-        name: Cascading replication 
+        name: Cascading replication
         type: boolean
         description: |
           Postgres allows to create replicas that are fed from another replica, instead of replicating from the primary instance.
@@ -388,19 +404,19 @@ categories:
         type: boolean
         description: |
           The operator allows a Postgres cluster to be setup in recovery mode while replicating from an external (non-operator managed) Postgres origin.
-          This allows migrations to the operator using streaming replication.          
+          This allows migrations to the operator using streaming replication.
         vendor_compliance: |
           To implement the feature, the user should be able to provide arbitrary host, port, username and password (or other means of credential passing) of the origin.
       - id: walsh
-        name: WAL Shipping 
+        name: WAL Shipping
         type: boolean
         description: |
           WAL Shipping is a Postgres technique that allows replication via a shared storage mechanism where WAL files produced on the primary node are copied ("shipped") to the replica.
           This feature is useful for having replicas for example on DR sites, replicate over global storage object stores and others.
         vendor_compliance: |
-          Implementing the feature implies both generating WAL files to a suitable location; as well as creating clusters that permanently read those WAL files and replicate from them.      
+          Implementing the feature implies both generating WAL files to a suitable location; as well as creating clusters that permanently read those WAL files and replicate from them.
       - id: prstb
-        name: Promote standby cluster 
+        name: Promote standby cluster
         type: boolean
         description: |
           The operator allows the user to promote a standby cluster that is a cluster with primary in recovery mode so that the primary becomes RW. This feature is used in conjunction with [harp/exrep] and/or [harp/walsh] to make GEO-replicated and/or DR (Disaster Recovery) clusters on other regions, where a region is essentially an independent Kubernetes cluster.
@@ -409,73 +425,80 @@ categories:
             The operator must allow to promote a standby clusters replicating either via WAL Shipping and/or streaming replication.
         main: true
       - id: lorep
-        name: Managed logical replication 
+        name: Managed logical replication
         type: boolean
         description: |
           Postgres supports logical replication as well as streaming replication. It requires some configuration and commands to be run by the user.
           This feature represents operator capabilities to perform these operations in a managed way, without the user having to type commands or create configurations directly.
         vendor_compliance: |
-          Feature is implemented if the operator allows the user to provide logical replication without having to setup it directly, just specifying (declarative) preferences.
-          Feature is still considered implemented if the operator cannot proceed until certain operations are performed by the users that are dependent on their environment
+          The operator is considered compliant if it allows the user to provide logical replication without having to setup it directly, just specifying (declarative) preferences.
+          The operator is still considered compliant if it cannot proceed until certain operations are performed by the users that are dependent on their environment
           (e.g. adding PKs, UNIQUEs or REPLICA IDENTITY to the DDL).
   - id: pgex
     name: PostgreSQL Extensions
-    features:      
+    features:
       - id: extme
-        name: Extensions distribution mechanism 
+        name: Extensions distribution mechanism
         type: string
         description: |
-          This feature is set to describe how extensions are shipped on a containerized environment.
+          This feature is set to describe how extensions are shipped in a containerized environment.
           Typically they are part of the same Postgres container image, but they may also be distributed via other mechanisms.
         vendor_compliance: |
-          Indicate `built-in' if the extensions come included with the same Postgres container; or a succint word or few words naming the distribution mechanism.
+          Indicate 'built-in' if the extensions come included with the same Postgres container; or a succinct word or few words naming the distribution mechanism.
           More details may be provided, if needed, via the links and comments fields.
       - id: coext
-        name: Core/contrib extensions  
+        name: Core/contrib extensions
         type: integer
         description: |
-          The number of core+contrib extensions provided by the operator.          
+          The number of core+contrib extensions provided by the operator for the latest Postgres version provided by the operator.
         vendor_compliance: |
-          Submission must provide the total number of core+contrib extensions supported.
+          Submission must provide the total number of core+contrib extensions supported for the latest Postgres version provided by the operator.
           It should also be provided, when available, a link with a detailed list of those extensions supported (via links field).
         main: true
       - id: thext
-        name: Third-party extensions 
+        name: Third-party extensions
         type: integer
         description: |
-          The number of extensions not included in the Postgres core+contrib (i.e. created by third parties, outside of Postgres repository) provided by the operator.  
+          The number of extensions not included in the Postgres core+contrib (i.e. created by third parties, outside of Postgres repository) for the latest Postgres version provided by the operator.
         vendor_compliance: |
-          Submission must provide the total number of third-party extensions supported.
-          It should also be provided, when available, a link with a detailed list of those extensions supported (via links field).
+          Submission must provide the total number of third-party extensions supported for the latest Postgres version provided by the operator.
+          A link with a detailed list of those extensions supported (via links field) should also be provided, if available.
         main: true
       - id: byext
-        name: Bring your own extension 
+        name: Bring your own extension
         type: boolean
         description: |
-          The opertor provides mechanisms for users to add (and optionally compile if needed) third-party extensions not initially provided by the operator.
+          The opertor provides mechanisms for users to add (or upload) third-party extensions not initially provided by the operator.
         vendor_compliance: |
-          To support this feature it is expected a fair amount of infrastructure provided for the user for bringing their own extensions.
-          This may include infrastructure to build own extensions, mechanisms to add them to all cluster's pods, protection against failovers, restarts, upgrades, etc.
+          The operator must support providing some mechanism to include custom extensions additionally or independently of the extension distribution mechanism,
+          if a user build a local extension it could be uploaded or included on the postgres container with an automatic copy to all replicas related.
   - id: bkup
     name: Backups
     features:
       - id: bktch
-        name: Backup Technology 
+        name: Backup Technology
         type: string
         description: |
           What technology (pgbasebackup, PgBackRest, WAL-e/g, Barman, custom, etc) is used to support creation and restoration of backups.
         vendor_compliance: |
-          Provide the most succint possible name of the technology.
+          Provide the most succinct possible name of the technology.
         main: true
       - id: bkdst
-        name: Backup destinations 
+        name: Backup destinations
         type: string_array
         description: |
           Where backups can be stored (typically this may include object stores, PVs, etc).
         vendor_compliance: |
-          Provide the most succint possible name of the technology(ies).
+          If any of the following technology names apply, use them, and add other names, as needed:
+          
+          * PersistentVolume
+          * NFS
+          * S3
+          * GCS
+          * Azure Blob
+          * Local file system
       - id: autbk
-        name: Automated backup management 
+        name: Automated backup management
         type: boolean
         description: |
           The operator provides mechanisms for performing backups automatically and providing lifecycle mechanisms (delete old backups according to a user-supplied policy).
@@ -484,12 +507,12 @@ categories:
           If only the former is provided, answer should be false but this capability should be mentioned in the comments field.
         main: true
       - id: encbk
-        name: Backups encryption 
+        name: Backups encryption
         type: boolean
         description: |
           Backups can be performed with user-supplied encryption keys.
       - id: ptrbk
-        name: Point In Time Recovery 
+        name: Point In Time Recovery
         type: boolean
         description: |
           The operator provides support for the user to specify a recovery point (in the past) to which a backup should be recovered to
@@ -498,7 +521,7 @@ categories:
           True response implies that at least time-based recovery is supported.
           If the operator also supports PITR by xid and label, clarify in the comments field.
       - id: mulbk
-        name: Multiple backup configurations 
+        name: Multiple backup configurations
         type: boolean
         description: |
           The operator supports managing more than one backup configuration.
@@ -508,33 +531,41 @@ categories:
     name: Management Interfaces
     features:
       - id: cucol
-        name: Resource display columns 
+        name: Resource display columns
         type: boolean
         description: |
-          Operator-managed objects (CRDs) include specific fields that provide additional user information.
-          These fields are shown when using tools like `kubectl` over those resources.
+          Operator-managed objects (CRDs) include specific fields that provide additional information about the Postgres instances.
+          These fields are shown when querying the Kubernetes resources using tools like `kubectl`.
+        vendor_compliance: |
+          In order to be compliant, operators have to provide at least the following information:
+          
+          * Replication status (primary/replica/etc)
+          * Cluster status (healthy/not healthy)
+          * Postgres major/minor version
+          * Latest base backup date
+          * SSL on/off
       - id: kbplg
-        name: kubectl plugin 
+        name: kubectl plugin
         type: boolean
         description: |
-          The users may download an additional kubectl plugin which provides custom commands to manage the operator that are custom to this operator.
+          The users may download an additional kubectl plugin which provides custom commands to manage the operator.
         vendor_compliance: |
           If the feature is provided, include a link to the downloadable plugin in the links field.
       - id: bagui
-        name: Basic management GUI 
+        name: Basic management GUI
         type: boolean
         description: |
           The operator bundles some GUI (web interface or other) that allows to perform basic operations (e.g. cluster creation) graphically.
         main: true
       - id: fugui
-        name: Fully-featured GUI 
+        name: Fully-featured GUI
         type: boolean
         description: |
-          The operator bundles a GUI that is fully-featured (that is, in feature-parity with the capabilities provided via the other management interfaces --typically CRDs).
+          The operator bundles a GUI that is fully-featured (that is, in feature-parity with the capabilities provided via the other management interfaces -- typically CRDs).
           The GUI may provide additional features that cannot be otherwise provided via text interfaces (e.g. graphical representation of resources or operations).
         main: true
       - id: urgui
-        name: GUI users & roles  
+        name: GUI users & roles
         type: boolean
         description: |
           The bundled management GUI has authentication and authorization baked in and provides mechanisms to support multiple users and authorize/deny them to perform operations.
@@ -542,82 +573,264 @@ categories:
           Only applies if [mgmi/bagui] or [mgmi/fugui] are provided.
           Submission should detail in the link and/or comments field how users and roles for the GUI can be managed.
       - id: guiss
-        name: GUI Single-Sign On 
+        name: GUI Single-Sign On
         type: boolean
         description: |
           The bundled management GUI supports integration with Single-Sign On (SSO), like OIDC, identity providers (e.g. Google, Github or Twitter login).
         vendor_compliance: |
           Only applies if [mgmi/bagui] or [mgmi/fugui] are provided.
-      - id: psgui
-        name: GUI SQL console
+      - id: cogui
+        name: GUI database console
         type: boolean
         description: |
-          The bundled management GUI includes a SQL console (e.g. like `psql`) that can connect to any database managed by the operator.
-        vendor_compliance: |
-          Only applies if [mgmi/bagui] or [mgmi/fugui] are provided.
-      - id: 
-        name: GUI graphical console 
-        type: boolean
-        description: |
-          The bundled management GUI includes a graphical SQL console that can connect to any database managed by the operator.
+          The bundled management GUI includes a console that can connect to any database managed by the operator and send command (e.g. like `psql`).
         vendor_compliance: |
           Only applies if [mgmi/bagui] or [mgmi/fugui] are provided.
   - id: o11y
     name: Observability
     features:
-      - id: 
-        name:  
+      - id: mtech
+        name: Metrics technology
+        type: string_array
+        description: |
+          If the operator supports extracting metrics from Postgres, how are they handled, which technology receives and process them?
+
+          If any of the following technology names apply, use them, and add other names, as needed:
+          
+          * Prometheus
+          * OpenTSDB
+          * Nagios
+          * Sensu
+        vendor_compliance: |
+          If supported, provide in the comments information about whether the technology is a dependency, is built-in, external, etc.
+          Provide link(s) to the documentation for further information.
+        main: true
+      - id: expme
+        name: Export metrics
         type: boolean
         description: |
-          
-        vendor_compliance: |
-          
-        main: true
-
+          Regardless of how metrics are processed (e.g. as part of the operator),
+          this feature is implemented when the operator allows the user to configure sending metrics to external services, like a metrics SaaS.
+      - id: cudas
+        name: Custom dashboards
+        type: boolean
+        description: |
+          In order to display the captured Postgres metrics, the operator provides specialized Postgres dashboards for the users.
+      - id: cuale
+        name: Custom alerts
+        type: boolean
+        description: |
+          The operator provides bundled specific Postgres alerts to be triggered on the Postgres metrics processed.
+          E.g. there is an alert for transaction wraparound or for unused replication slots.
+      - id: exdel
+        name: Exposed decorated logs
+        type: boolean
+        description: |
+          The operator provides a mechanism to expose all the logs of the managed Postgres instances to a centralized logging tool.
+          The logs must be decorated with extra metadata that includes the Pod name and namespace, the cluster name, the role of the Postgres instance (e.g. primary, replica, standby-leader, etc.) and the timestamp that will be available to be used to filter logs entries.
+          There is no need to configure the tool in order to obtain required extra metadata from the logs.
+      - id: explg
+        name: Export logs
+        type: boolean
+        description: |
+          The operator allows the user to configure an external sink for the Postgres logs (e.g. a SaaS service).
+      - id: oo11y
+        name: Operator Observability
+        type: boolean
+        description: |
+          The operator is itself a source of telemetry data, potentially including metrics, traces and logs, about its own performance.
   - id: secy
     name: Security
     features:
-      - id: 
-        name:  
+      - id: opcsc
+        name: Operator code security scanning
         type: boolean
         description: |
-          
-        vendor_compliance: |
-          
+          The operator code is always scanned for security vulnerabilities.
         main: true
-
+      - id: imgsc
+        name: Image scanning
+        type: boolean
+        description: |
+          Operator-provided images are always scanned for security vulnerabilities.
+        main: true
+      - id: sigim
+        name: Signed images
+        type: boolean
+        description: |
+          Container images are digitally signed according to the [sigstore](https://www.sigstore.dev/) project.
+        vendor_compliance: |
+          Compliance may also be achieved by using a technology other than sigstore, as long as it provides an equivalent set of security capabilities.
+      - id: isbom
+        name: Software Bill of Materials
+        type: boolean
+        description: |
+          The operator releases include the SBOM (Software Bill of Materials), a detailed description of all the components, modules, and their dependencies.
+        vendor_compliance: |
+          SBOM is expected to be in accordance to the [Kubernetes SIG BOM](https://github.com/kubernetes-sigs/bom).
+      - id: fgopp
+        name: Fine-grained RBAC permissions
+        type: boolean
+        description: |
+          The operator uses a separate serviceaccount that has RBAC permissions that only require the access that is actually needed to create and manage the Kubernetes resources, not more.
+      - id: noprm
+        name: No or justified privileged mode
+        type: boolean
+        description: |
+          The operator-provided containers do not require privileged mode.
+          The container processes do not run as root.
+        vendor_compliance: |
+          Reasonable exceptions to this rule can be made for features that require or do not diminish the container's security, e.g. when using eBPF.
   - id: day2
     name: Day 2 Operations
     features:
-      - id: 
-        name:  
+      - id: amiup
+        name: Automated minor upgrades
         type: boolean
         description: |
-          
+          The operator can perform a minor version upgrade of a Postgres cluster automatically.
+          This operation can be managed by the user declaratively.
         vendor_compliance: |
-          
+          The operator must provide proper information to the user as to the status and final result of the operation.
+          The operator should provide ongoing status information, and perform the operation with the minimum downtime required.
         main: true
-
-  
+      - id: amaup
+        name: Automated major upgrades
+        type: boolean
+        description: |
+          The operator can perform a major version upgrade of a Postgres cluster automatically.
+          This operation can be managed by the user declaratively.
+        vendor_compliance: |
+          The operator must provide proper information to the user as to the status and final result of the operation.
+          The operator should provide ongoing status information, and perform the operation with the minimum downtime required.
+        main: true
+      - id: crest
+        name: Controlled cluster restart
+        type: boolean
+        description: |
+          Sometimes Postgres needs to be restarted (e.g. changing of a parameter that requires restart).
+          The operator provides means to perform this operation automatically and in a controlled manner (rolling restart) so that the cluster faces a minimal downtime only.
+      - id: ociup
+        name: Container images upgrade
+        type: boolean
+        description: |
+          Similarly to the controlled restart operation, the operator is capable of updating the running container images (which require a pod restart) automatically and with minimal cluster impact.
+      - id: swtch
+        name: Switchover
+        type: boolean
+        description: |
+          If HA capabilities are provided, the operator also provides a mechanism for manual switchover.
+          The user may specify the configuration declaratively and the operator will perform the desired switchover automatically, updating the endpoints/services as required.
+      - id: sqlmi
+        name: SQL Migrations
+        type: boolean
+        description: |
+          The operator provides managed SQL migration capabilities.
+          The user may specify SQL scripts that contain migrations (DDL changes, etc) to be deployed to a given database, having the operator apply them automatically.
+        vendor_compliance: |
+          The operator must report back to the user detailed information about the results of the execution(s) of the script(s) provided by the user.
+      - id: oday2
+        name: Other Day 2 Operations
+        type: string_array
+        description: |
+          The operator provides support for other managed Day 2 operations.
+        vendor_compliance: |
+          All the mentioned additional day 2 operations need to be possible via declarative configuration and the operator to fully execute them without further user intervention.
   - id: dain
     name: Data Integration
     features:
-      - id: 
-        name:  
+      - id: kfkin
+        name: Kafka integration
         type: boolean
         description: |
-          
+          The operator provides a managed solution for automation to export CDC (Change Data Capture) events to Kafka.
         vendor_compliance: |
-          
-        main: true
+          Kafka could be an external dependency to the operator.
+          The whole operation is expected to be fully automated, with the user only providing a declarative configuration.
+      - id: migpg
+        name: Migration from Postgres
+        type: string_array
+        description: |
+          The operator provides a managed capability to automatically migrate data from another (external) Postgres database.
+          Migrations may be offline (source needs to be disconnected from clients while the migration happens) and/or via CDC (Change Data Capture),
+          which allows for near-zero downtime migrations.
+        vendor_compliance: |
+          Provide one or more of the following values: `offline`, `cdc`.
+      - id: migmy
+        name: Migration from MySQL
+        type: string_array
+        description: |
+          The operator provides a managed capability to automatically migrate data from a MySQL database.
+          Migrations may be offline (source needs to be disconnected from clients while the migration happens) and/or via CDC (Change Data Capture),
+          which allows for near-zero downtime migrations.
+          Optionally, the operator may provide additional capabilities to convert the schema from the source database into the target Postgres database.
+        vendor_compliance: |
+          Provide one or more of the following values: `offline`, `cdc`, `schema conversion`.
+      - id: migor
+        name: Migration from Oracle
+        type: string_array
+        description: |
+          The operator provides a managed capability to automatically migrate data from an Oracle database.
+          Migrations may be offline (source needs to be disconnected from clients while the migration happens) and/or via CDC (Change Data Capture),
+          which allows for near-zero downtime migrations.
+          Optionally, the operator may provide additional capabilities to convert the schema from the source database into the target Postgres database.
+        vendor_compliance: |
+          Provide one or more of the following values: `offline`, `cdc`, `schema conversion`.
+      - id: migms
+        name: Migration from SQL Server
+        type: string_array
+        description: |
+          The operator provides a managed capability to automatically migrate data from a SQL Server database.
+          Migrations may be offline (source needs to be disconnected from clients while the migration happens) and/or via CDC (Change Data Capture),
+          which allows for near-zero downtime migrations.
+          Optionally, the operator may provide additional capabilities to convert the schema from the source database into the target Postgres database.
+        vendor_compliance: |
+          Provide one or more of the following values: `offline`, `cdc`, `schema conversion`.
+      - id: migmo
+        name: Migration from MongoDB
+        type: string_array
+        description: |
+          The operator provides a managed capability to automatically migrate data from a MongoDB database.
+          Migrations may be offline (source needs to be disconnected from clients while the migration happens) and/or via CDC (Change Data Capture),
+          which allows for near-zero downtime migrations.
+          Optionally, the operator may provide additional capabilities to convert the schema from the source database into the target Postgres database.
+        vendor_compliance: |
+          Provide one or more of the following values: `offline`, `cdc`, `schema conversion`.
+      - id: migot
+        name: Migration from other databases
+        type: string_array
+        description: |
+          The operator provides a managed capability to automatically migrate data from other relational or non-relational databases.
+          Migrations may be offline (source needs to be disconnected from clients while the migration happens) and/or via CDC (Change Data Capture),
+          which allows for near-zero downtime migrations.
+          Optionally, the operator may provide additional capabilities to convert the schema from the source database into the target Postgres database.
+        vendor_compliance: |
+          Provide the names of the other database from where migration is supported.
   - id: shrd
     name: Sharding
     features:
-      - id: 
-        name:  
+      - id: mshrd
+        name: Managed sharding support
         type: boolean
         description: |
-          
-        vendor_compliance: |
-          
+          The operator understands horizontal scalability and is capable to automatically deploying sets of clusters (shards) with their accompanying infrastructure (coordinators, services, etc).
+          The user should be able to write a declarative configuration of a sharded cluster and the operator to fully deploy it without any further manual user intervention.
         main: true
+      - id: shrdt
+        name: Sharding technology
+        type: string_array
+        description: |
+          If managed sharding support is provided, which technology or technologies are used to provide sharding support (which is not included in Postgres core).
+      - id: aggds
+        name: Aggregated monitoring dashboards
+        type: boolean
+        description: |
+          Since a sharded cluster is a set of (independent) Postgres clusters, an aggregated dashboard is one that provides Observability information across all shards of the cluster.
+          E.g. total database size, tps processed or total number of client connections.
+      - id: cobkp
+        name: Coordinated backups
+        type: boolean
+        description: |
+          A sharded cluster can be backed up by backing up each shard independently, but those backups are not necessarily consistent with each other.
+          If sharding is used, an additional capability is to coordinate backups on a given timestamp so that they are performed or can be restored at the same logical timestamp,
+          so they become consistent with each other.
