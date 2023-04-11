@@ -59,7 +59,7 @@ categories:
       - id: olmcl
         name: Operator Capability Level
         type: string
-        descriptions: |
+        description: |
           [Operator Capability Levels](https://sdk.operatorframework.io/docs/overview/operator-capabilities/) indicates the operator maturity
           levels in regards to their lifecycle management capabilities for the application or workload they deliver. The capability models
           aims to provide guidance in terminology to express what features users can expect from an operator.
