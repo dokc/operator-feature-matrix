@@ -3,7 +3,7 @@
 This directory contains:
 
 * [vendor-submission-template.yaml](vendor-submission-template.yaml). This is the file that should be copied as a template to fill in the details of each vendor's submission. Note that this file should not be edited directly, as it is derived from the source [feature matrix](../spec/feature_matrix.yaml).
-* [vendor-submission-template-generator](https://github.com/dokc/operator-feature-matrix). Script and helper file to generate the `vendor-submission-template.yaml` from the source feature matrix.
+* [vendor-submission-template-generator](vendor-submission-template-generator). Script and helper file to generate the `vendor-submission-template.yaml` from the source feature matrix.
 
 
 ## Vendor Submission Guidelines
