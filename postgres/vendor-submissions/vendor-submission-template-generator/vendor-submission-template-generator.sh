@@ -8,4 +8,4 @@ then
     exit
 fi
 
-gomplate -d fm='../spec/feature_matrix.yaml' -o 'vendor-submission-template.yaml' -f 'vendor_submission-template-generator.tmpl'
+gomplate -d fm='../../spec/feature_matrix.yaml' -o '../vendor-submission-template.yaml' -f 'vendor-submission-template-generator.tmpl'
