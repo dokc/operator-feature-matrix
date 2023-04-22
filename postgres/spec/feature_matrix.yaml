@@ -12,7 +12,7 @@ categories:
         description: |
           Mechanism(s) provided to install the operator.
         vendor_compliance: |
-          Provide a succinct value or list of values of the mechanisms supported.
+          Provide a succinct value or list of values of the supported mechanisms.
           If any of the following names apply, use them, and add other mechanism names, as needed:
           
           * YAML
@@ -24,9 +24,9 @@ categories:
         name: Management via CRDs
         type: boolean
         description: |
-          The operator can be managed via CRDs (Custom Resource Definition).
+          The operator manages CRDs (Custom Resource Definition).
         vendor_compliance: |
-          If true, provide a list of the names of the CRDs supported by the operator. Names should be direct links to their documentation.
+          If true, provide a list of the names of the CRDs managed by the operator. Names should be direct links to their documentation or API reference.
         main: true
       - id: offin
         name: Offline installation
@@ -55,7 +55,7 @@ categories:
         type: string_array
         description: |
           Indicate the base image of the images used by the operator. (e.g: scratch, ubi, fedora, ubuntu, centos, alpine, etc.).
-          Provide the image name without tags (e.g. debian instead of debian:8.11)
+          Provide the image name without tags (e.g. debian instead of debian:8.11).
       - id: olmcl
         name: Operator Capability Level
         type: string
@@ -64,7 +64,7 @@ categories:
           levels in regards to their lifecycle management capabilities for the application or workload they deliver. The capability models
           aims to provide guidance in terminology to express what features users can expect from an operator.
         vendor_compliance: |
-          Capability level must be set one of the following levels:
+          Capability level must be set to one of the following levels:
 
           1. `Basic Install`
           2. `Seamless Upgrades`
@@ -85,7 +85,7 @@ categories:
         description: |
           Which major (and minor) versions does this version of the operator support.
         vendor_compliance: |
-          Provide a list of every major version supported followed by a list in parenthesis of the minor versions supported for that major version.
+          Provide a list of every supported major version followed by a list in parenthesis of the minor versions supported for that major version.
           E.g. '15 (15.1, 15.0), 14 (14.3, 14.2)'. All versions must be ordered by reverse chronological order.
           Other components versions that are used may be described in the comments (e.g: Patroni, WAL-G, PgBackRest, PgBouncer, etc.)
         main: true
@@ -164,7 +164,7 @@ categories:
         name: Deployment automation
         type: boolean
         description: |
-          The operator provides capabilities to deploy production-ready clusters automatically based on a provided configuration.
+          The operator provides capabilities to automatically deploy production-ready clusters based on a provided configuration.
           No user initiated commands must be required.
       - id: pomte
         name: Pod management technology
@@ -274,7 +274,7 @@ categories:
         type: boolean
         description: |
           The number of pods in the cluster can be set to 0. This implies that no pods (no compute) would be used, but storage is not removed.
-          Upon scaling up, the cluster should be brought back up without the need to restore a backup.
+          Upon scaling up, the cluster should be brought back up without the need to restore a backup. This feature may also be known as "hibernation".
       - id: tblsp
         name: Tablespaces
         type: boolean
@@ -358,7 +358,7 @@ categories:
         type: boolean
         description: |
           The operator provides the facility that in the event of a node or pod failure where the Postgres primary is affected,
-          another Postgres pod (if it exists) will be promoted to primary. The operation must happen automatically without user intervention.
+          another Postgres instance (if available) will be promoted to primary. The operation must happen automatically without user intervention.
         main: true
       - id: techa
         name: HA Technology
@@ -468,10 +468,10 @@ categories:
         name: Bring your own extension
         type: boolean
         description: |
-          The opertor provides mechanisms for users to add (or upload) third-party extensions not initially provided by the operator.
+          The operator provides mechanisms for users to add (or upload) third-party extensions not initially provided by the operator.
         vendor_compliance: |
           The operator must support providing some mechanism to include custom extensions additionally or independently of the extension distribution mechanism,
-          if a user build a local extension it could be uploaded or included on the postgres container with an automatic copy to all replicas related.
+          if a user builds a local extension, this could be uploaded or included on the postgres container with an automatic copy to all replicas related.
   - id: bkup
     name: Backups
     features:
@@ -501,7 +501,7 @@ categories:
         name: Automated backup management
         type: boolean
         description: |
-          The operator provides mechanisms for performing backups automatically and providing lifecycle mechanisms (delete old backups according to a user-supplied policy).
+          The operator provides mechanisms for performing backups automatically and providing lifecycle mechanisms (delete old backups according to a user-supplied policy - often known as retention policies).
         vendor_compliance: |
           True response for the feature implies both automatic backups and lifecycle management.
           If only the former is provided, answer should be false but this capability should be mentioned in the comments field.
@@ -593,11 +593,12 @@ categories:
         name: Metrics technology
         type: string_array
         description: |
-          If the operator supports extracting metrics from Postgres, how are they handled, which technology receives and process them?
+          If the operator supports extracting metrics from Postgres, define how they are handled, which technology receives and processes them.
 
           If any of the following technology names apply, use them, and add other names, as needed:
           
           * Prometheus
+          * OTEL
           * OpenTSDB
           * Nagios
           * Sensu
@@ -627,7 +628,7 @@ categories:
         type: boolean
         description: |
           The operator provides a mechanism to expose all the logs of the managed Postgres instances to a centralized logging tool.
-          The logs must be decorated with extra metadata that includes the Pod name and namespace, the cluster name, the role of the Postgres instance (e.g. primary, replica, standby-leader, etc.) and the timestamp that will be available to be used to filter logs entries.
+          The logs must be decorated with extra metadata in order to provide semantic meaning, including the Pod name and namespace, the cluster name, the role of the Postgres instance (e.g. primary, replica, standby-leader, etc.) and the timestamp that will be available to be used to filter logs entries.
           There is no need to configure the tool in order to obtain required extra metadata from the logs.
       - id: explg
         name: Export logs
@@ -693,6 +694,7 @@ categories:
         vendor_compliance: |
           The operator must provide proper information to the user as to the status and final result of the operation.
           The operator should provide ongoing status information, and perform the operation with the minimum downtime required.
+          Provide information about the update strategy (i.e. restart of the pods or rolling update followed by a switchover or a restart).
         main: true
       - id: amaup
         name: Automated major upgrades
@@ -720,7 +722,7 @@ categories:
         type: boolean
         description: |
           If HA capabilities are provided, the operator also provides a mechanism for manual switchover.
-          The user may specify the configuration declaratively and the operator will perform the desired switchover automatically, updating the endpoints/services as required.
+          The user may specify the configuration declaratively and the operator will perform the desired switchover automatically, by demoting the current primary, promoting the a replica, and updating the endpoints/services as required.
       - id: sqlmi
         name: SQL Migrations
         type: boolean
