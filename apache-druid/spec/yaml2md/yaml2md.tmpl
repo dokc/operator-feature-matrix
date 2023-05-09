@@ -1,0 +1,7 @@
+{{ range (ds "fm").categories }}
+## {{ .name }} – [{{ .id }}](#{{ .id }})
+| **ID** | **NAME** | **TYPE** | **DESCRIPTION** | **VENDOR COMPLIANCE** | **MAIN CATEGORY** |
+|---|---|---|---|---|---|
+{{ range .features }}| {{ .id }} | {{ .name }} | {{ .type }} | {{ if (has . "description") }}{{ .description | strings.Trim "\n" | strings.ReplaceAll "\n" "<br />" }}{{ end }} | {{ if (has . "vendor_compliance") }}{{ .vendor_compliance | strings.ReplaceAll "\n" "<br />" }}{{ end }} | {{ if (has . "main") }} ✓ {{ end }} |
+{{ end }}
+{{ end }}
