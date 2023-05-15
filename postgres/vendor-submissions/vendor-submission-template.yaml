@@ -35,9 +35,9 @@ featureMatrix:
         #  The operator can be managed via CRDs (Custom Resource Definition).
         # vendor_compliance: |
         #  If true, provide a list of the names of the CRDs supported by the operator. Names should be direct links to their documentation.
-        value:
-        references:
-        comments:
+                value:
+                references:
+                comments:
         - id: offin
         # name: Offline installation
         # type: boolean
