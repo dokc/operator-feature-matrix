@@ -211,7 +211,9 @@ categories:
         vendor_compliance: |
           The connection pool may be deployed in several ways, like a Deployment layer, a side car, etc.
           All should be valid towards this feature as long as they are deployed automatically and offer an entrypoint for the user to the connection pooler.
-        value: ???
+        value: true
+        comments: |
+          this is not relevant to the operator itself. Druid configures it with defaults. You can override them through the operator
       - id: cpccf
         name: Connection pool custom config
         type: boolean
@@ -219,7 +221,7 @@ categories:
           The operator allows the user to supply a custom connection pool configuration for the connection pool service.
         vendor_compliance: |
           Only applies if [drcl/conpl] is true.
-        value: ???
+        value: true
       - id: tlssp
         name: TLS Support
         type: boolean
@@ -241,20 +243,15 @@ categories:
         vendor_compliance: |
           Only applies if [drcl/tlscu] is true.
         value: ???
-      - id: insql
-        name: Initialization from SQL scripts
-        type: boolean
-        description: |
-          After the database cluster creation, the operator will run automatically one or more user-supplied scripts for initial DDL or data (possibly limited in size) creation.
-          The operator must properly inform the user of the execution result of the scripts.
-        value: ???
       - id: inext
         name: Initialization from external source
         type: boolean
         description: |
           After the database cluster creation, the operator will automatically connect to an external data source (like an object storage or a public repo) and fetch the DDL/data.
           The operator must properly inform the user of the execution result of the scripts.
-        value: ???
+        value: false
+        comments: |
+          This will be available in the near future with the Druid Ingestion controller
       - id: mgmup
         name: Management of db users/passwords
         type: boolean
@@ -287,7 +284,10 @@ categories:
           * PrimaryAndReplicasAndBalanced: Primary service, replicas services and a service that load balance RW/RO traffic transparently must be offered.
           * Balanced: A single service that load balances RW/RO traffic transparently.
           * Primary: Primary service must be offered.
-        value: ???
+        value: "Balanced"
+        comments: |
+          Druid is built with microservices architecture. There is no really primary-secondary. There is an option to deploy
+          a Kubernetes Service for each component with then references to all pods from that type.
       - id: stosc
         name: Automatic storage scaling
         type: boolean
@@ -295,7 +295,7 @@ categories:
           If the user's selected storage technology supports transparent scaling, the operator will take care of scaling the storage automatically
           (either by setting some default thresholds or requiring explicit declarative configuration from the user).
         value: true
-        references: |
+        references:
           - https://github.com/datainfrahq/druid-operator/blob/f3f44e332e2d08ea463c1ca49517177a71bcf4b7/docs/features.md#volume-expansion-of-druid-nodes-running-as-statefulsets
         comments: |
           NOTE: This feature has been tested only on cloud environments and storage classes which have supported volume expansion. This feature uses cascade=orphan strategy to make sure only Stateful is deleted and recreated and pods are not deleted.
@@ -305,7 +305,10 @@ categories:
         description: |
           The number of pods in the cluster can be set to 0. This implies that no pods (no compute) would be used, but storage is not removed.
           Upon scaling up, the cluster should be brought back up without the need to restore a backup. This feature may also be known as "hibernation".
-        value: ???
+        value: true
+        comments: |
+          Druid saves its data in a remote storage (like S3 bucket), in case of scaling to zero and then scaling back up, the data will be loaded back
+          from the remote store.
       - id: cupdi
         name: Custom Apache Druid images
         type: boolean
@@ -334,10 +337,10 @@ categories:
         name: User supplied ports
         type: boolean
         description: |
-          The user may specify custom ports to be created alongside the services that expose PostgreSQL.
+          The user may specify custom ports to be created alongside the services that expose Apache Druid.
         vendor_compliance: |
-          Only applies if [pgcl/pgsrv] is set.
-        value: ???
+          Only applies if [drcl/drsrv] is set.
+        value: true
       - id: srvbi
         name: Support for Service Binding
         type: boolean
