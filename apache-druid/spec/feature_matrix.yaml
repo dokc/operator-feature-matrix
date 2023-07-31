@@ -1,0 +1,704 @@
+---
+metadata:
+  version: v1.1.0
+  date: 26.04.2023
+categories:
+  - id: genc
+    name: General Characteristics
+    features:
+      - id: instm
+        name: Installation mechanism
+        type: string_array
+        description: |
+          Mechanism(s) provided to install the operator.
+        vendor_compliance: |
+          Provide a succinct value or list of values of the supported mechanisms.
+          If any of the following names apply, use them, and add other mechanism names, as needed:
+          
+          * YAML
+          * Helm
+          * Kustomize
+          * Operator Bundle
+        value: ["Helm"]
+        references:
+          - https://github.com/datainfrahq/druid-operator/blob/master/docs/getting_started.md
+      - id: mcrds
+        name: Management via CRDs
+        type: boolean
+        description: |
+          The operator manages CRDs (Custom Resource Definition).
+        vendor_compliance: |
+          If true, provide a list of the names of the CRDs managed by the operator. Names should be direct links to their documentation or API reference.
+        value: true
+        references:
+          - druid.apache.org/v1alpha1/Druid - https://github.com/datainfrahq/druid-operator/blob/v1.1.0/apis/druid/v1alpha1/druid_types.go
+      - id: offin
+        name: Offline installation
+        type: boolean
+        description: |
+          Whether it is possible to install the operator on a (air-gapped) cluster without internet connection.
+        vendor_compliance: |
+          A link should be provided with documentation on how to install the operator on air-gapped environments.
+        value: true
+        references:
+          - https://github.com/datainfrahq/druid-operator/blob/master/docs/getting_started.md
+        comments: Druid operator can be installed in air-gapped environment the same as with any other type of environment.
+      - id: scpua
+        name: Supported CPU architectures
+        type: string_array
+        description: |
+          Support for the operator to run on nodes with specified CPU architectures.
+        vendor_compliance: |
+          Provide a list of CPU architectures that are supported between:
+          
+          * amd64
+          * arm
+          * arm64
+          * ppc64le
+          * s390x
+
+          In case you support additional architectures, add their name(s) in a similar fashion.
+        value: ["amd64"]
+      - id: coios
+        name: Container images OSes
+        type: string_array
+        description: |
+          Indicate the base image of the images used by the operator. (e.g: scratch, ubi, fedora, ubuntu, centos, alpine, etc.).
+          Provide the image name without tags (e.g. debian instead of debian:8.11).
+        value: ["gcr.io/distroless/java$JDK_VERSION-debian11"]
+        comments: Druid's base image is depends on the JDK version required
+      - id: olmcl
+        name: Operator Capability Level
+        type: string
+        description: |
+          [Operator Capability Levels](https://sdk.operatorframework.io/docs/overview/operator-capabilities/) indicates the operator maturity
+          levels in regards to their lifecycle management capabilities for the application or workload they deliver. The capability models
+          aims to provide guidance in terminology to express what features users can expect from an operator.
+        vendor_compliance: |
+          Capability level must be set to one of the following levels:
+
+          1. `Basic Install`
+          2. `Seamless Upgrades`
+          3. `Full Lifecycle`
+          4. `Deep Insights`
+          5. `Auto Pilot`
+
+          A link should be provided with documentation on how the operator fulfil the declared capability level.
+
+          For a detailed description of each capability level refer to the Operator Framework documentation for
+          [Operator Capability Level](https://sdk.operatorframework.io/docs/overview/operator-capabilities/).
+        value: "Seamless Upgrades"
+        references:
+          - https://github.com/datainfrahq/druid-operator/blob/master/docs/features.md
+  - id: vers
+    name: Versions
+    features:
+      - id: drver
+        name: Supported Apache Druid versions
+        type: string_array
+        description: |
+          Which major (and minor) versions does this version of the operator support.
+        vendor_compliance: |
+          Provide a list of every supported major version followed by a list in parenthesis of the minor versions supported for that major version.
+          E.g. '15 (15.1, 15.0), 14 (14.3, 14.2)'. All versions must be ordered by reverse chronological order.
+          Other components versions that are used may be described in the comments (e.g: Patroni, WAL-G, PgBackRest, PgBouncer, etc.)
+        value: ["25 (25.0)"]
+        comments: |
+          Druid image is customizable thus you can use different versions.
+          The version of the operator has been tested with this version of Druid
+      - id: k8ver
+        name: Supported Kubernetes versions
+        type: string_array
+        description: |
+          Which Kubernetes versions the operator can be installed into.
+        vendor_compliance: |
+          Provide a list of official Kubernetes minor versions numbers, ordered by reverse chronological order.
+          Use a range of versions, if possible, e.g. '1.26 - 1.23' or '1.22 - 1.19'.
+        value: "1.27 - 1.25"
+  - id: lisu
+    name: Licensing & Support
+    features:
+      - id: ossli
+        name: Open Source license
+        type: boolean
+        description: |
+          The operator is published, and its source code is made publicly available, under an OSI-approved open source license.
+        vendor_compliance: |
+          If true, provide the SPDX identifier(s) of the license.
+        value: true
+      - id: fcimg
+        name: Free container images
+        type: boolean
+        description: |
+          The container images used for the operator's operation are free to distribute and use, not subject to commercial restrictions.
+        vendor_compliance: |
+          If false, provide a link with documentation on the usage requisites/restrictions of the container images.
+        value: true
+      - id: nenof
+        name: No enterprise-only features
+        type: boolean
+        description: |
+          All the operator's features are provided as open source.
+          No derived, proprietary (often called 'enterprise') versions exist with additional, non open source features.
+        vendor_compliance: |
+          If false, provide links to all known derived, proprietary versions.
+          Linked documentation should clearly reflect the features that are only part of proprietary versions.
+        value: true
+      - id: comms
+        name: Commercial support
+        type: boolean
+        description: |
+          Vendor and/or other entities offer paid-for, commercial support for the operator.
+        vendor_compliance: |
+          Provide a link or list of links to the entities that provide commercial support.
+          Links should be as specific as possible, pointing to informative documentation on the provided support.
+        value: false
+      - id: pubit
+        name: Public issue tracker
+        type: boolean
+        description: |
+          Development happens in the open. There is a public issue tracker where users may view, comment and create issues.
+        vendor_compliance: |
+          Provide a specific link to the issue tracker.
+        value: true
+        references:
+          - https://github.com/datainfrahq/druid-operator/issues
+      - id: pubch
+        name: Public chat/forums
+        type: boolean
+        description: |
+          There is/are public forums, mailing lists, chat groups (Slack, Discord, Matrix, etc) where users may freely join and participate in discussions.
+        vendor_compliance: |
+          Provide links to all relevant user forums.
+        value: true
+        references:
+          - druid-operator channel in Kubernetes Slack Workspace - https://kubernetes.slack.com/archives/C04F4M6HT2L
+          - DataInfra slack workspace - https://launchpass.com/datainfra-workspace
+  - id: drcl
+    name: Apache Druid Clusters
+    features:
+      - id: depau
+        name: Deployment automation
+        type: boolean
+        description: |
+          The operator provides capabilities to automatically deploy production-ready clusters based on a provided configuration.
+          No user initiated commands must be required.
+        value: true
+      - id: pomte
+        name: Pod management technology
+        type: string_array
+        description: |
+          Which Pod management technology is used to handle database's Pods. E.g. 'StatefulSet', 'Deployment', 'Custom', etc.
+        vendor_compliance: |
+          Provide the most succinct possible name of the technology. Use the Kubernetes resource type name (e.g. 'Deployment'), if applicable.
+        valur: ["StatefulSet", "Deployment"]
+      - id: drcnf
+        name: Apache Druid custom config
+        type: boolean
+        description: |
+          The operator allows the user to supply custom configuration.
+        value: true
+      - id: conpl
+        name: Integrated connection pooling
+        type: boolean
+        description: |
+          The operator provides options to deploy a connection pool in front of the database, automatically deployed and configured.
+        vendor_compliance: |
+          The connection pool may be deployed in several ways, like a Deployment layer, a side car, etc.
+          All should be valid towards this feature as long as they are deployed automatically and offer an entrypoint for the user to the connection pooler.
+        value: true
+        comments: |
+          This is not relevant to the operator itself. 
+          Druid configures it with defaults. 
+          You can override them through the CRD.
+        references:
+          - https://druid.apache.org/docs/latest/operations/basic-cluster-tuning.html#connection-pool-guidelines
+      - id: cpccf
+        name: Connection pool custom config
+        type: boolean
+        description: |
+          The operator allows the user to supply a custom connection pool configuration for the connection pool service.
+        vendor_compliance: |
+          Only applies if [drcl/conpl] is true.
+        value: true
+      - id: tlssp
+        name: TLS Support
+        type: boolean
+        description: |
+          Connections can be secured with SSL/TLS support.
+        value: true
+        comments: |
+          This is not relevant to the operator itself. 
+          Druid does not configure it by default. 
+          You can configure it through the CRD.
+        references:
+          - https://druid.apache.org/docs/latest/operations/tls-support.html
+      - id: tlscu
+        name: TLS user-provided certificates
+        type: boolean
+        description: |
+          Operators may chose by default to generate self-signed SSL certificates.
+          They may also offer the option to specify the CA and certificates that users want the clusters to use.
+        value: true
+      - id: crtmg
+        name: CertManager integration
+        type: boolean
+        description: |
+          The operator integrates with CertManager in order to generate the certificate to be used with.
+        vendor_compliance: |
+          Only applies if [drcl/tlscu] is true.
+        value: ?@adheip
+      - id: inext
+        name: Initialization from external source
+        type: boolean
+        description: |
+          After the database cluster creation, the operator will automatically connect to an external data source (like an object storage or a public repo) and fetch the DDL/data.
+          The operator must properly inform the user of the execution result of the scripts.
+        value: ?@adheip
+      - id: mgmup
+        name: Management of db users/passwords
+        type: boolean
+        description: |
+          The operator provides a mechanism to declarative create, modify or delete users, roles and/or password for the cluster.
+        value: ?@adheip
+      - id: reqli
+        name: Customize computing resource requests, limits
+        type: boolean
+        description: |
+          The user may specify/customize the requests, the limits or both for computing resources (CPU, memory) of the pods.
+        value: true
+      - id: hugpa
+        name: Support for huge pages
+        type: boolean
+        description: |
+          The user may specify the request to use huge pages (and/or potentially for other sidecars).
+          It must be able to be configured and start using huge pages.
+        value: ?@adheip
+      - id: drsrv
+        name: Apache Druid exposed via Service
+        type: string
+        description: |
+          The operator creates by default or allows the user to request one or more Kubernetes Service(s) to be created to expose the system connections.
+          Expected capabilities should include a RW (read-write) or RO (read-only in case of cascading replication) connection to the primary instance; and, optionally, a RO (read-only) to load balance read-only replicas instances in the cluster.
+        vendor_compliance: |
+          The value must be one of:
+
+          * PrimaryAndReplicas: Primary and replicas services must be offered.
+          * PrimaryAndReplicasAndBalanced: Primary service, replicas services and a service that load balance RW/RO traffic transparently must be offered.
+          * Balanced: A single service that load balances RW/RO traffic transparently.
+          * Primary: Primary service must be offered.
+        value: "Balanced"
+        comments: |
+          Druid is built with microservices architecture. There is no really primary-secondary. There is an option to deploy
+          a Kubernetes Service for each component with then references to all pods from that type.
+      - id: stosc
+        name: Automatic storage scaling
+        type: boolean
+        description: |
+          If the user's selected storage technology supports transparent scaling, the operator will take care of scaling the storage automatically
+          (either by setting some default thresholds or requiring explicit declarative configuration from the user).
+        value: true
+        references:
+          - https://github.com/datainfrahq/druid-operator/blob/f3f44e332e2d08ea463c1ca49517177a71bcf4b7/docs/features.md#volume-expansion-of-druid-nodes-running-as-statefulsets
+        comments: |
+          NOTE: This feature has been tested only on cloud environments and storage classes which have supported volume expansion. This feature uses cascade=orphan strategy to make sure only Stateful is deleted and recreated and pods are not deleted.
+      - id: dovol
+        name: Orphan Volume Deletion
+        type: boolean
+        description: |
+          When deleting and/or scaling a StatefulSet down, Kubernetes will not delete the volumes associated with the StatefulSet.
+          The operator allows to delete orphan volumes to handle cases like scaling down.
+        value: true
+      - id: scal0
+        name: Scale down to zero
+        type: boolean
+        description: |
+          The number of pods in the cluster can be set to 0. This implies that no pods (no compute) would be used, but storage is not removed.
+          Upon scaling up, the cluster should be brought back up without the need to restore a backup. This feature may also be known as "hibernation".
+        value: true
+        comments: |
+          Druid saves its data in a remote storage (like S3 bucket), in case of scaling to zero and then scaling back up, the data will be loaded back
+          from the remote store.
+      - id: hascl
+        name: Horizontal Auto Scaling
+        type: boolean
+        description: |
+          The operator allow to configure horizontal pod autoscaling to its relevant components.
+        value: true
+        comments: |
+          The Druid operator allows to configure HPA to all its components.
+      - id: cupdi
+        name: Custom Apache Druid images
+        type: boolean
+        description: |
+          The operator allows the user to specify custom (user-provided) Druid container images, instead of using the operator's provided images.
+        vendor_compliance: |
+          The operator should specify if the custom image needs to follow some minimal patterns to be able to work, or if it can work
+          with any postgres container image provided.
+        value: true
+      - id: uside
+        name: User supplied sidecars
+        type: boolean
+        description: |
+          The user may specify custom sidecars (containers or init containers) to be created alongside the system container (and, possibly, other operator sidecars).
+          User supplied sidecars must be able, by default or by configuration, to access the Postgres container filesystem and Unix Domain Sockets file.
+        value: true
+        references:
+          - https://github.com/datainfrahq/druid-operator/blob/master/docs/features.md#Add-Additional-Containers-in-Druid-Nodes
+      - id: adcnt
+        name: User supplied additional containers
+        type: boolean
+        description: |
+          The operator supports adding additional containers to run along with the druid pods. This helps support 
+          co-located, co-managed helper processes for the primary druid application. 
+          This can be used for init containers, sidecars, proxies etc.
+          This is different then current Kubernetes implementation and will be part of Kubernetes in the near future:
+          https://github.com/kubernetes/enhancements/blob/master/keps/sig-node/753-sidecar-containers/README.md#summary
+        value: true
+      - id: usvol
+        name: User supplied volumes
+        type: boolean
+        description: |
+          The user may specify and mount custom volumes to be created alongside the volumes created for the system container.
+        value: true
+      - id: usprt
+        name: User supplied ports
+        type: boolean
+        description: |
+          The user may specify custom ports to be created alongside the services that expose Apache Druid.
+        vendor_compliance: |
+          Only applies if [drcl/drsrv] is set.
+        value: true
+      - id: srvbi
+        name: Support for Service Binding
+        type: boolean
+        description: |
+          [Service Binding](https://servicebinding.io/spec/core/1.0.0/) is a Kubernetes specification to "communicating service secrets to workloads in a consistent way".
+          If the operator supports Service Binding, applications that are bound to the Postgres clusters will be able to fetch database access credentials without requiring
+          the user to specify them manually in the application.
+        vendor_compliance: |
+          The operator must implement the [Provisioned Service](https://servicebinding.io/spec/core/1.0.0/#provisioned-service) part of the specification.
+        value: ?@adheip
+      - id: cuann
+        name: Custom Annotations
+        type: boolean
+        description: |
+          The operator allows the user to provide custom [Annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+          (aside from any operator generated Annotations) to the objects generated by the operator.
+        vendor_compliance: |
+          The operator must provide configuration for setting Annotations on all objects generated by the operator.
+          Partial compliance is achieved if at least Pods can be annotated and this is clearly marked in the comments.
+        value: true
+      - id: culab
+        name: Custom Labels
+        type: boolean
+        description: |
+          The operator allows the user to provide custom [Labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) to the objects generated by the operator.
+        vendor_compliance: |
+          The operator must provide configuration for setting Labels on all objects generated by the operator.
+          Partial compliance is achieved if at Labels can be added to at least Pods and this is clearly marked in the comments.
+        value: true
+      - id: apdnd
+        name: Assign Pod to Node
+        type: string
+        description: |
+          The operator allows Pods to be assigned to a specific set of Nodes based on some [Kubernetes known rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/). E.g. Node Labels, Affinity, etc.
+        vendor_compliance: |
+          Indicate one of the following values:
+          
+          * 'Complete': if the operator support all the rules to assign a Pod to a Node defined in the latest Kubernetes version specified under [vers/k8ver].
+          * 'Partial': if the operator support only partially the rules to assign a Pod to a Node.
+
+          A link for each supported rule or rules group to assign a Pod to a Node must be specified.
+        value: 'Complete'
+      - id: topsc
+        name: Topology Spread Constraints
+        type: boolean
+        description: |
+          The operator allows pods to specify [Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints),
+          to control how Pods are spread across the Kubernetes cluster among failure-domains such as regions, zones, nodes, and other user-defined topology domains.
+        value: false
+  - id: bkup
+    name: Backups
+    features:
+      - id: bktch
+        name: Backup Technology
+        type: string_array
+        description: |
+          What technology (pgbasebackup, PgBackRest, WAL-e/g, Barman, custom, etc) is used to support creation and restoration of backups.
+        vendor_compliance: |
+          Provide the most succinct possible name of the technology.
+        main: true
+      - id: bkdst
+        name: Backup destinations
+        type: string_array
+        description: |
+          Where backups can be stored (typically this may include object stores, PVs, etc).
+        vendor_compliance: |
+          If any of the following technology names apply, use them, and add other names, as needed:
+          
+          * PersistentVolume
+          * NFS
+          * S3
+          * GCS
+          * Azure Blob
+          * Local file system
+        comments: |
+          Druid deep storage is not something to backup.
+          Druid can backup its metadata storage which can be on of the following:
+          - Apache Derby
+          - PostgreSQL
+          - MySQL
+        value: []
+      - id: autbk
+        name: Automated backup management
+        type: boolean
+        description: |
+          The operator provides mechanisms for performing backups automatically and providing lifecycle mechanisms (delete old backups according to a user-supplied policy - often known as retention policies).
+        vendor_compliance: |
+          True response for the feature implies both automatic backups and lifecycle management.
+          If only the former is provided, answer should be false but this capability should be mentioned in the comments field.
+        comments: |
+          Druid deep storage is not something to backup.
+          Druid can backup its metadata storage.
+        main: false
+      - id: encbk
+        name: Backups encryption
+        type: boolean
+        description: |
+          Backups can be performed with user-supplied encryption keys.
+        value: false
+      - id: ptrbk
+        name: Point In Time Recovery
+        type: boolean
+        description: |
+          The operator provides support for the user to specify a recovery point (in the past) to which a backup should be recovered to
+          (if unspecified, backup will be recovered in full).
+        vendor_compliance: |
+          True response implies that at least time-based recovery is supported.
+          If the operator also supports PITR by xid and label, clarify in the comments field.
+        value: false
+      - id: mulbk
+        name: Multiple backup configurations
+        type: boolean
+        description: |
+          The operator supports managing more than one backup configuration.
+          This is typically used to store backups on different object stores (for protection purposes) or to send them to different sites.
+          It may also include different lifecycle policies.
+        value: false
+  - id: mgmi
+    name: Management Interfaces
+    features:
+      - id: cucol
+        name: Resource display columns
+        type: boolean
+        description: |
+          Operator-managed objects (CRDs) include specific fields that provide additional information about the CRD instances.
+          These fields are shown when querying the Kubernetes resources using tools like `kubectl`.
+        vendor_compliance: |
+          In order to be compliant, operators have to provide at least the following information:
+          
+          * Replication status (primary/replica/etc)
+          * Cluster status (healthy/not healthy)
+          * Postgres major/minor version
+          * Latest base backup date
+          * SSL on/off
+        value: false
+      - id: kbplg
+        name: kubectl plugin
+        type: boolean
+        description: |
+          The users may download an additional kubectl plugin which provides custom commands to manage the operator.
+        vendor_compliance: |
+          If the feature is provided, include a link to the downloadable plugin in the links field.
+        value: false
+      - id: bagui
+        name: Basic management GUI
+        type: boolean
+        description: |
+          The operator bundles some GUI (web interface or other) that allows to perform basic operations (e.g. cluster creation) graphically.
+        value: false
+      - id: fugui
+        name: Fully-featured GUI
+        type: boolean
+        description: |
+          The operator bundles a GUI that is fully-featured (that is, in feature-parity with the capabilities provided via the other management interfaces -- typically CRDs).
+          The GUI may provide additional features that cannot be otherwise provided via text interfaces (e.g. graphical representation of resources or operations).
+        value: false
+      - id: urgui
+        name: GUI users & roles
+        type: boolean
+        description: |
+          The bundled management GUI has authentication and authorization baked in and provides mechanisms to support multiple users and authorize/deny them to perform operations.
+        vendor_compliance: |
+          Only applies if [mgmi/bagui] or [mgmi/fugui] are provided.
+          Submission should detail in the link and/or comments field how users and roles for the GUI can be managed.
+        value: false
+      - id: guiss
+        name: GUI Single-Sign On
+        type: boolean
+        description: |
+          The bundled management GUI supports integration with Single-Sign On (SSO), like OIDC, identity providers (e.g. Google, Github or Twitter login).
+        vendor_compliance: |
+          Only applies if [mgmi/bagui] or [mgmi/fugui] are provided.
+        value: false
+      - id: cogui
+        name: GUI database console
+        type: boolean
+        description: |
+          The bundled management GUI includes a console that can connect to any database managed by the operator and send command (e.g. like `psql`).
+        vendor_compliance: |
+          Only applies if [mgmi/bagui] or [mgmi/fugui] are provided.
+        value: false
+  - id: o11y
+    name: Observability
+    features:
+      - id: mtech
+        name: Metrics technology
+        type: string_array
+        description: |
+          If the operator supports extracting metrics from Druid, define how they are handled, which technology receives and processes them.
+
+          If any of the following technology names apply, use them, and add other names, as needed:
+          
+          * Prometheus
+          * OTEL
+          * OpenTSDB
+          * Nagios
+          * Sensu
+        vendor_compliance: |
+          If supported, provide in the comments information about whether the technology is a dependency, is built-in, external, etc.
+          Provide link(s) to the documentation for further information.
+        value: ?@adheip
+      - id: expme
+        name: Export metrics
+        type: boolean
+        description: |
+          Regardless of how metrics are processed (e.g. as part of the operator),
+          this feature is implemented when the operator allows the user to configure sending metrics to external services, like a metrics SaaS.
+        value: ?@adheip
+      - id: cudas
+        name: Custom dashboards
+        type: boolean
+        description: |
+          In order to display the captured metrics, the operator provides specialized dashboards for the users.
+        value: ?@adheip
+      - id: cuale
+        name: Custom alerts
+        type: boolean
+        description: |
+          The operator provides bundled specific alerts to be triggered on the metrics processed.
+        value: false
+      - id: exdel
+        name: Exposed decorated logs
+        type: boolean
+        description: |
+          The operator provides a mechanism to expose all the logs of the managed instances to a centralized logging tool.
+          The logs must be decorated with extra metadata in order to provide semantic meaning, including the Pod name and namespace, the cluster name, the role of the Postgres instance (e.g. primary, replica, standby-leader, etc.) and the timestamp that will be available to be used to filter logs entries.
+          There is no need to configure the tool in order to obtain required extra metadata from the logs.
+        value: ?@adheip
+      - id: explg
+        name: Export logs
+        type: boolean
+        description: |
+          The operator allows the user to configure an external sink for the logs (e.g. a SaaS service).
+        value: ?@adheip
+      - id: oo11y
+        name: Operator Observability
+        type: boolean
+        description: |
+          The operator is itself a source of telemetry data, potentially including metrics, traces and logs, about its own performance.
+        value: true
+        comments: Provides Kubebuilder built-in metrics & logs
+  - id: secy
+    name: Security
+    features:
+      - id: opcsc
+        name: Operator code security scanning
+        type: boolean
+        description: |
+          The operator code is always scanned for security vulnerabilities.
+        value: false
+      - id: imgsc
+        name: Image scanning
+        type: boolean
+        description: |
+          Operator-provided images are always scanned for security vulnerabilities.
+        value: false
+      - id: sigim
+        name: Signed images
+        type: boolean
+        description: |
+          Container images are digitally signed according to the [sigstore](https://www.sigstore.dev/) project.
+        vendor_compliance: |
+          Compliance may also be achieved by using a technology other than sigstore, as long as it provides an equivalent set of security capabilities.
+        value: ?@adheip
+      - id: isbom
+        name: Software Bill of Materials
+        type: boolean
+        description: |
+          The operator releases include the SBOM (Software Bill of Materials), a detailed description of all the components, modules, and their dependencies.
+        vendor_compliance: |
+          SBOM is expected to be in accordance to the [Kubernetes SIG BOM](https://github.com/kubernetes-sigs/bom).
+        value: false
+      - id: fgopp
+        name: Fine-grained RBAC permissions
+        type: boolean
+        description: |
+          The operator uses a separate serviceaccount that has RBAC permissions that only require the access that is actually needed to create and manage the Kubernetes resources, not more.
+        value: true
+      - id: noprm
+        name: No or justified privileged mode
+        type: boolean
+        description: |
+          The operator-provided containers do not require privileged mode.
+          The container processes do not run as root.
+        vendor_compliance: |
+          Reasonable exceptions to this rule can be made for features that require or do not diminish the container's security, e.g. when using eBPF.
+        value: true
+  - id: day2
+    name: Day 2 Operations
+    features:
+      - id: amiup
+        name: Automated minor upgrades
+        type: boolean
+        description: |
+          The operator can perform a minor version upgrade of a Postgres cluster automatically.
+          This operation can be managed by the user declaratively.
+        vendor_compliance: |
+          The operator must provide proper information to the user as to the status and final result of the operation.
+          The operator should provide ongoing status information, and perform the operation with the minimum downtime required.
+          Provide information about the update strategy (i.e. restart of the pods or rolling update followed by a switchover or a restart).
+        value: ?@adheip
+      - id: amaup
+        name: Automated major upgrades
+        type: boolean
+        description: |
+          The operator can perform a major version upgrade of a Postgres cluster automatically.
+          This operation can be managed by the user declaratively.
+        vendor_compliance: |
+          The operator must provide proper information to the user as to the status and final result of the operation.
+          The operator should provide ongoing status information, and perform the operation with the minimum downtime required.
+        value: ?@adheip
+      - id: crest
+        name: Controlled cluster restart
+        type: boolean
+        description: |
+          Sometimes Druid needs to be restarted (e.g. changing of a parameter that requires restart).
+          The operator provides means to perform this operation automatically and in a controlled manner 
+          (rolling restart / custom) so that the cluster faces a minimal to non downtime only.
+        value: true
+      - id: ociup
+        name: Container images upgrade
+        type: boolean
+        description: |
+          Similarly to the controlled restart operation, the operator is capable of updating the running container images (which require a pod restart) automatically and with minimal cluster impact.
+        value: true
+      - id: oday2
+        name: Other Day 2 Operations
+        type: string_array
+        description: |
+          The operator provides support for other managed Day 2 operations.
+        vendor_compliance: |
+          All the mentioned additional day 2 operations need to be possible via declarative configuration and the operator to fully execute them without further user intervention.
+        value: []

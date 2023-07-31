@@ -1,0 +1,23 @@
+---
+metadata:
+  featureMatrixSpecVersion:
+  submission:
+    version:
+    datePublished:
+    releaseNotes:
+	operator:
+    name:
+    url:
+featureMatrix:
+  categories:{{ range (ds "fm").categories }}
+    - id: {{ .id }}
+      # name: {{ .name }}{{ range .features }}
+        - id: {{ .id }}
+        # name: {{ .name }}
+        # type: {{ .type }}
+        # description: |
+        #  {{ .description | strings.ReplaceAll "\n" "" }}{{ if (has . "vendor_compliance") }}{{ "\n        " }}# vendor_compliance: |{{ "\n        " }}#  {{ .vendor_compliance | strings.TrimSuffix "\n" | strings.ReplaceAll "\n" "\n        #  " }}{{ end }}
+        value:
+        references:
+        comments:{{ end }}
+{{ end }}
