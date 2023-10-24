@@ -207,6 +207,11 @@ categories:
         description: |
           Operators may chose by default to generate self-signed SSL certificates.
           They may also offer the option to specify the CA and certificates that users want Postgres clusters to use.
+      - id: mtlsrep
+        name: Mutual TLS support for PostgreSQL replicas
+        type: boolean
+        description: |
+          Operators exclusively rely on TLS certificate authentication and authorization to connect the managed replicas in the cluster.
       - id: crtmg
         name: CertManager integration
         type: boolean
@@ -630,6 +635,18 @@ categories:
           The operator provides a mechanism to expose all the logs of the managed Postgres instances to a centralized logging tool.
           The logs must be decorated with extra metadata in order to provide semantic meaning, including the Pod name and namespace, the cluster name, the role of the Postgres instance (e.g. primary, replica, standby-leader, etc.) and the timestamp that will be available to be used to filter logs entries.
           There is no need to configure the tool in order to obtain required extra metadata from the logs.
+      - id: stdout
+        name: JSON logs in stdout
+        type: boolean
+        description: |
+          Each container in a pod should directly export logs in JSON format to the standard output channel as recommended and expected by Kubernetes.
+      - id: audit
+        name: Audit logs
+        type: boolean
+        description: |
+          The operator provides an integrated way to seamlessly export logs for auditing purposes.
+        vendor_compliance: |
+          Provide more information about the technology (e.g. pgaudit extension) used for this purpose.
       - id: explg
         name: Export logs
         type: boolean
@@ -682,6 +699,11 @@ categories:
           The container processes do not run as root.
         vendor_compliance: |
           Reasonable exceptions to this rule can be made for features that require or do not diminish the container's security, e.g. when using eBPF.
+      - id: rofs
+        name: Read-only file system for image containers
+        type: boolean
+        description: |
+          The root file system of the image containers provided by the operator are read-only, enforcing immutability of the binaries.
   - id: day2
     name: Day 2 Operations
     features:
@@ -695,6 +717,16 @@ categories:
           The operator must provide proper information to the user as to the status and final result of the operation.
           The operator should provide ongoing status information, and perform the operation with the minimum downtime required.
           Provide information about the update strategy (i.e. restart of the pods or rolling update followed by a switchover or a restart).
+        main: true
+      - id: cfgchg
+        name: PostgreSQL configuration changes
+        type: boolean
+        description: |
+          The operator automatically handles reloads and, where required, restarts of PostgreSQL following any change to the configuration requested by the user.
+          This includes seamless coordination of restarts of the instances after changes to the [hot-standby sensitive parameters](https://www.postgresql.org/docs/current/hot-standby.html#HOT-STANDBY-ADMIN), namely `max_connections`, `max_prepared_transactions`, `max_locks_per_transaction`, `max_wal_senders`, and `max_worker_processes`.
+        vendor_compliance: |
+          The operator must provide proper information to the user as to the status and final result of the operation.
+          Declare how changes of hot-standby sensitive parameters are handled by the operator.
         main: true
       - id: amaup
         name: Automated major upgrades
@@ -731,6 +763,13 @@ categories:
           The user may specify SQL scripts that contain migrations (DDL changes, etc) to be deployed to a given database, having the operator apply them automatically.
         vendor_compliance: |
           The operator must report back to the user detailed information about the results of the execution(s) of the script(s) provided by the user.
+      - id: fence
+        name: Fencing of Postgres instances
+        type: boolean
+        description: |
+          The operator provides a way to stop PostgreSQL instances while keeping the pods running in order to enable investigation of the content of the data directories.
+          This can be very useful for production support and diagnostics, especially in data corruption due to storage issues.
+          Fencing can be requested on a single instance, a set of them or the entire cluster, in a declarative way. The operator must provide a way to resume.
       - id: oday2
         name: Other Day 2 Operations
         type: string_array
